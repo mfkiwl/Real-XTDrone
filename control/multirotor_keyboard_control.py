@@ -5,8 +5,8 @@ import tty, termios
 from std_msgs.msg import String
 
 
-MAX_LINEAR = 10
-MAX_ANG_VEL = 0.5
+MAX_LINEAR = 20
+MAX_ANG_VEL = 3
 LINEAR_STEP_SIZE = 0.01
 ANG_VEL_STEP_SIZE = 0.01
 
@@ -251,7 +251,7 @@ if __name__=="__main__":
         elif angular < -MAX_ANG_VEL:
             angular = - MAX_ANG_VEL
             
-        twist.linear.x = leftward; twist.linear.y = -forward ; twist.linear.z = upward
+        twist.linear.x = forward; twist.linear.y = leftward ; twist.linear.z = upward
         twist.angular.x = 0.0; twist.angular.y = 0.0;  twist.angular.z = angular
 
         for i in range(multirotor_num):
