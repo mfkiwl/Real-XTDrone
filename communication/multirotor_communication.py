@@ -1,16 +1,11 @@
 import rospy
-import tf
-import yaml
-from mavros_msgs.msg import GlobalPositionTarget, State, PositionTarget
-from mavros_msgs.srv import CommandBool, CommandVtolTransition, SetMode
+from mavros_msgs.msg import State, PositionTarget
+from mavros_msgs.srv import CommandBool, SetMode
 from geometry_msgs.msg import PoseStamped, Pose, Twist
+from gazebo_msgs.srv import GetModelState
 from nav_msgs.msg import Odometry
-from sensor_msgs.msg import Imu, NavSatFix
 from std_msgs.msg import String
-import time
 from pyquaternion import Quaternion
-import math
-from multiprocessing import Process
 import sys
 
 class Communication:
@@ -19,27 +14,20 @@ class Communication:
         
         self.vehicle_type = vehicle_type
         self.vehicle_id = vehicle_id
-        self.imu = None
-        self.local_pose = None
-        self.current_state = None
-        self.current_heading = None 
+        self.current_position = None
+        self.current_yaw = 0
         self.hover_flag = 0
         self.target_motion = PositionTarget()
-        self.global_target = None
         self.arm_state = False
-        self.offboard_state = False
         self.motion_type = 0
         self.flight_mode = None
         self.mission = None
-        self.transition_state = None
-        self.transition = None
             
         '''
         ros subscribers
         '''
         self.local_pose_sub = rospy.Subscriber(self.vehicle_type+'_'+self.vehicle_id+"/mavros/local_position/pose", PoseStamped, self.local_pose_callback)
         self.mavros_sub = rospy.Subscriber(self.vehicle_type+'_'+self.vehicle_id+"/mavros/state", State, self.mavros_state_callback)
-        self.imu_sub = rospy.Subscriber(self.vehicle_type+'_'+self.vehicle_id+"/mavros/imu/data", Imu, self.imu_callback)
         self.cmd_sub = rospy.Subscriber("/xtdrone/"+self.vehicle_type+'_'+self.vehicle_id+"/cmd",String,self.cmd_callback)
         self.cmd_pose_flu_sub = rospy.Subscriber("/xtdrone/"+self.vehicle_type+'_'+self.vehicle_id+"/cmd_pose_flu", Pose, self.cmd_pose_flu_callback)
         self.cmd_pose_enu_sub = rospy.Subscriber("/xtdrone/"+self.vehicle_type+'_'+self.vehicle_id+"/cmd_pose_enu", Pose, self.cmd_pose_enu_callback)
@@ -70,20 +58,18 @@ class Communication:
         while not rospy.is_shutdown():
             self.target_motion_pub.publish(self.target_motion)
             
-            if (self.flight_mode is "LAND") and (self.local_pose.pose.position.z < 0.15):
+            if (self.flight_mode is "LAND") and (self.current_position.z < 0.15):
                 if(self.disarm()):
                     self.flight_mode = "DISARMED"
 
             rate.sleep()
 
     def local_pose_callback(self, msg):
-        self.local_pose = msg
+        self.current_position = msg.pose.position
+        self.current_yaw = self.q2yaw(msg.pose.orientation)
 
     def mavros_state_callback(self, msg):
         self.mavros_state = msg.mode
-
-    def imu_callback(self, msg):
-        self.current_heading = self.q2yaw(msg.orientation)
 
     def construct_target(self, x=0, y=0, z=0, vx=0, vy=0, vz=0, afx=0, afy=0, afz=0, yaw=0, yaw_rate=0):
         target_raw_pose = PositionTarget()
@@ -206,7 +192,7 @@ class Communication:
     def hover(self):
         self.coordinate_frame = 1
         self.motion_type = 0
-        self.target_motion = self.construct_target(x=self.local_pose.pose.position.x,y=self.local_pose.pose.position.y,z=self.local_pose.pose.position.z)
+        self.target_motion = self.construct_target(x=self.current_position.x,y=self.current_position.y,z=self.current_position.z,yaw=self.current_yaw)
 
     def flight_mode_switch(self):
         if self.flight_mode == 'HOVER':
@@ -221,7 +207,7 @@ class Communication:
             return False
 
     def takeoff_detection(self):
-        if self.local_pose.pose.position.z > 0.3 and self.arm_state:
+        if self.current_position.z > 0.3 and self.arm_state:
             return True
         else:
             return False
