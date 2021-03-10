@@ -26,7 +26,7 @@ def vins_callback(data):
 rospy.init_node('vins_transfer')
 rospy.Subscriber("/vins_estimator/camera_pose", Odometry, vins_callback)
 position_pub = rospy.Publisher(vehicle_type+"_0/mavros/vision_pose/pose", PoseStamped, queue_size=2)
-rate = rospy.Rate(60) 
+rate = rospy.Rate(20) 
 
 while True:
     local_pose.header.stamp = rospy.Time.now()
