@@ -4,15 +4,16 @@ from nav_msgs.msg import Odometry
 import sys
 
 vehicle_type = sys.argv[1]
+vehicle_id = sys.argv[2]
 local_pose = PoseStamped()
 local_pose.header.frame_id = 'map'
 
 def vio_callback(data):
     local_pose.pose= data.pose.pose
        
-rospy.init_node('vio_transfer')
+rospy.init_node(vehicle_type+"_"+vehicle_id+'/vio_transfer')
 rospy.Subscriber("/t265/odom/sample", Odometry, vio_callback)
-position_pub = rospy.Publisher(vehicle_type+"_0/mavros/vision_pose/pose", PoseStamped, queue_size=2)
+position_pub = rospy.Publisher(vehicle_type+"_"+vehicle_id+"/mavros/vision_pose/pose", PoseStamped, queue_size=2)
 rate = rospy.Rate(20) 
 
 while True:
