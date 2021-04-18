@@ -10,6 +10,8 @@ local_pose.header.frame_id = 'map'
 
 def vio_callback(data):
     local_pose.pose= data.pose.pose
+    local_pose.pose.position.x = - local_pose.pose.position.x
+    local_pose.pose.position.y = - local_pose.pose.position.y
        
 rospy.init_node(vehicle_type+"_"+vehicle_id+'_vio_transfer')
 rospy.Subscriber("/camera/odom/sample", Odometry, vio_callback)
