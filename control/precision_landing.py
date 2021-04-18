@@ -18,7 +18,7 @@ if __name__ == '__main__':
     cmd = String()
     local_pose = PoseStamped()
     Kp = 1.0
-    land_vel = 0.5
+    land_vel = 0.3
     not_find_time = 0
     get_time = False
     rospy.Subscriber(vehicle_type+'_'+vehicle_id+"/mavros/vision_pose/pose", PoseStamped, local_pose_callback)
@@ -30,7 +30,7 @@ if __name__ == '__main__':
             tfstamped = tfBuffer.lookup_transform('map', 'tag_'+vehicle_id, rospy.Time(0))
             get_time = False
             print(tfstamped.transform.translation.x,tfstamped.transform.translation.y)
-            cmd_vel_enu.linear.x = Kp * (tfstamped.transform.translation.x+0.3 - local_pose.pose.position.x)
+            cmd_vel_enu.linear.x = Kp * (tfstamped.transform.translation.x - local_pose.pose.position.x)
             cmd_vel_enu.linear.y = Kp * (tfstamped.transform.translation.y - local_pose.pose.position.y)
             cmd_vel_enu.linear.z = -land_vel
         except:
