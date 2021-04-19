@@ -44,18 +44,18 @@
 
   <!-- main node -->
   <!-- <node pkg="ego_planner" name="ego_planner_node" type="ego_planner_node" output="screen" launch-prefix="valgrind"> -->
-  <node pkg="ego_planner" name="iris_$(arg drone_id)_ego_planner_node" type="ego_planner_node" output="screen">
+  <node pkg="ego_planner" name="links_$(arg drone_id)_ego_planner_node" type="ego_planner_node" output="screen">
   
     <remap from="~odom_world" to="/$(arg odometry_topic)"/>
-    <remap from="~planning/bspline" to = "/xtdrone/iris_$(arg drone_id)/planning/bspline"/>
-    <remap from="~planning/data_display" to = "/xtdrone/iris_$(arg drone_id)/planning/data_display"/>
+    <remap from="~planning/bspline" to = "/xtdrone/links_$(arg drone_id)/planning/bspline"/>
+    <remap from="~planning/data_display" to = "/xtdrone/links_$(arg drone_id)/planning/data_display"/>
     <remap from="~planning/broadcast_bspline_from_planner" to = "/broadcast_bspline"/>
     <remap from="~planning/broadcast_bspline_to_planner" to = "/broadcast_bspline"/>
 
-    <remap from="~grid_map/odom" to="/xtdrone/iris_$(arg drone_id)/$(arg odometry_topic)"/>
-    <remap from="~grid_map/cloud" to="/iris_$(arg drone_id)/$(arg cloud_topic)"/>
-    <remap from="~grid_map/pose"   to = "/iris_$(arg drone_id)/$(arg camera_pose_topic)"/> 
-    <remap from="~grid_map/depth" to = "/iris_$(arg drone_id)/$(arg depth_topic)"/>
+    <remap from="~grid_map/odom" to="/$(arg odometry_topic)"/>
+    <remap from="~grid_map/cloud" to="/$(arg cloud_topic)"/>
+    <remap from="~grid_map/pose"   to = "/$(arg camera_pose_topic)"/> 
+    <remap from="~grid_map/depth" to = "/$(arg depth_topic)"/>
     
 
     <!-- planning fsm -->
@@ -92,9 +92,9 @@
     <param name="grid_map/local_update_range_x"  value="5.5" /> 
     <param name="grid_map/local_update_range_y"  value="5.5" /> 
     <param name="grid_map/local_update_range_z"  value="4.5" /> 
-    <param name="grid_map/obstacles_inflation"     value="0.2" /> 
+    <param name="grid_map/obstacles_inflation"     value="0.3" /> 
     <param name="grid_map/local_map_margin" value="10"/>
-    <param name="grid_map/ground_height"        value="0.24"/>
+    <param name="grid_map/ground_height"        value="-0.3"/>
     <!-- camera parameter -->
     <param name="grid_map/cx" value="$(arg cx)"/>
     <param name="grid_map/cy" value="$(arg cy)"/>
@@ -117,11 +117,11 @@
     <param name="grid_map/min_ray_length" value="0.1"/>
     <param name="grid_map/max_ray_length" value="4.5"/>
 
-    <param name="grid_map/virtual_ceil_height"   value="3"/>
+    <param name="grid_map/virtual_ceil_height"   value="2"/>
     <param name="grid_map/visualization_truncate_height"   value="2"/>
     <param name="grid_map/show_occ_time"  value="false"/>
     <param name="grid_map/pose_type"     value="1"/>  
-    <param name="grid_map/frame_id"      value="world"/>
+    <param name="grid_map/frame_id"      value="map"/>
 
   <!-- planner manager -->
     <param name="manager/max_vel" value="$(arg max_vel)" type="double"/>

@@ -70,7 +70,7 @@ class Leader:
     def loop(self):
         rospy.init_node('leader')
         rate = rospy.Rate(self.f)
-        while True:
+        while not rospy.is_shutdown():
             #self.cmd_vel_enu = Twist()
             for follower_info in self.followers_info:
                 if follower_info == "Arrived":

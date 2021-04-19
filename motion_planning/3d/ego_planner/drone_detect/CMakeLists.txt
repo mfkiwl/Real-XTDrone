@@ -20,6 +20,7 @@ find_package(catkin REQUIRED
 
 ## Find system libraries
 find_package(Eigen3 REQUIRED)
+set(OpenCV_DIR "/usr/local/opencv341/share/OpenCV")
 find_package(OpenCV REQUIRED)
 find_package(Boost REQUIRED)
 

@@ -182,7 +182,7 @@ class Follower:
         for i in range(self.uav_num-1):   
             #print(i)
             self.slack_right = numpy.array([100]*(self.uav_num-1))      
-            while True:        
+            while not rospy.is_shutdown():       
                 self.visit_left = numpy.array([0]*(self.uav_num-1))                
                 self.visit_right = numpy.array([0]*(self.uav_num-1))               
                 if self.find_path(i):    
