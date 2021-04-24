@@ -41,7 +41,7 @@
     <arg name="cx" value="326.1186828613281"/>
     <arg name="cy" value="240.5"/>
     <arg name="fx" value="382.2458190917969"/>
-    <arg name="fy" value="241.09939575195312"/>
+    <arg name="fy" value="382.2458190917969"/>
 
     <!-- maximum velocity and acceleration the drone will reach -->
     <arg name="max_vel" value="1" />
