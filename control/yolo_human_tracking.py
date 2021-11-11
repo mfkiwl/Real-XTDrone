@@ -55,10 +55,10 @@ if __name__ == "__main__":
     vehicle_type = sys.argv[1]
     vehicle_id = sys.argv[2]
     rospy.init_node('yolo_human_tracking')
-    rospy.Subscriber("/darknet_ros/bounding_boxes", BoundingBoxes, darknet_callback)
-    rospy.Subscriber(vehicle_type+'_'+vehicle_id+"/mavros/local_position/pose", PoseStamped, local_pose_callback)
-    vel_pub = rospy.Publisher('/xtdrone/'+vehicle_type+'_'+vehicle_id+'/cmd_vel_flu', Twist, queue_size=2)
-    cmd_pub = rospy.Publisher('/xtdrone/'+vehicle_type+'_'+vehicle_id+'/cmd', String, queue_size=2)
+    rospy.Subscriber("/darknet_ros/bounding_boxes", BoundingBoxes, darknet_callback, queue_size=1)
+    rospy.Subscriber(vehicle_type+'_'+vehicle_id+"/mavros/local_position/pose", PoseStamped, local_pose_callback), queue_size=1
+    vel_pub = rospy.Publisher('/xtdrone/'+vehicle_type+'_'+vehicle_id+'/cmd_vel_flu', Twist, queue_size=1)
+    cmd_pub = rospy.Publisher('/xtdrone/'+vehicle_type+'_'+vehicle_id+'/cmd', String, queue_size=1)
     rate = rospy.Rate(60) 
     while(True):
         rate.sleep()

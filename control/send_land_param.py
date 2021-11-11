@@ -14,6 +14,6 @@ land_param.data.append(x_bias)
 land_param.data.append(y_bias)
 rate = rospy.Rate(10)
 while not rospy.is_shutdown():
-    land_param_pub = rospy.Publisher('/xtdrone/'+vehicle_type+'_'+vehicle_id+'/land_param', Float32MultiArray, queue_size=2)
+    land_param_pub = rospy.Publisher('/xtdrone/'+vehicle_type+'_'+vehicle_id+'/land_param', Float32MultiArray, queue_size=1)
     land_param_pub.publish(land_param)
     rate.sleep()

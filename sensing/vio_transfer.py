@@ -14,8 +14,8 @@ def vio_callback(data):
     local_pose.pose.position.y = - local_pose.pose.position.y
        
 rospy.init_node(vehicle_type+"_"+vehicle_id+'_vio_transfer')
-rospy.Subscriber("/t265/odom/sample", Odometry, vio_callback)
-position_pub = rospy.Publisher(vehicle_type+"_"+vehicle_id+"/mavros/vision_pose/pose", PoseStamped, queue_size=2)
+rospy.Subscriber("/t265/odom/sample", Odometry, vio_callback, queue_size=1)
+position_pub = rospy.Publisher(vehicle_type+"_"+vehicle_id+"/mavros/vision_pose/pose", PoseStamped, queue_size=1)
 rate = rospy.Rate(20) 
 
 while not rospy.is_shutdown():

@@ -37,10 +37,10 @@ if __name__ == '__main__':
     z_bias = 1
     not_find_time = 0
     get_time = False
-    rospy.Subscriber(vehicle_type+'_'+vehicle_id+"/mavros/vision_pose/pose", PoseStamped, local_pose_callback)
-    rospy.Subscriber('/xtdrone/'+vehicle_type+'_'+vehicle_id+'/land_param', Float32MultiArray, land_param_callback)
-    cmd_vel_pub = rospy.Publisher('/xtdrone/'+vehicle_type+'_'+vehicle_id+'/cmd_vel_enu', Twist, queue_size=2)
-    cmd_pub = rospy.Publisher('/xtdrone/'+vehicle_type+'_'+vehicle_id+'/cmd', String, queue_size=2)
+    rospy.Subscriber(vehicle_type+'_'+vehicle_id+"/mavros/vision_pose/pose", PoseStamped, local_pose_callback, queue_size=1)
+    rospy.Subscriber('/xtdrone/'+vehicle_type+'_'+vehicle_id+'/land_param', Float32MultiArray, land_param_callback, queue_size=1)
+    cmd_vel_pub = rospy.Publisher('/xtdrone/'+vehicle_type+'_'+vehicle_id+'/cmd_vel_enu', Twist, queue_size=1)
+    cmd_pub = rospy.Publisher('/xtdrone/'+vehicle_type+'_'+vehicle_id+'/cmd', String, queue_size=1)
     rate = rospy.Rate(20)
     while not rospy.is_shutdown():
         try:

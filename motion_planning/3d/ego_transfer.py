@@ -22,9 +22,9 @@ def odom_callback(data):
     camera_odom.twist.twist.linear.y = -camera_odom.twist.twist.linear.y
     
 rospy.init_node(vehicle_type+"_"+vehicle_id+'_ego_transfer')
-rospy.Subscriber("/t265/odom/sample", Odometry, odom_callback)
-pose_pub = rospy.Publisher("/camera_pose", PoseStamped, queue_size=2)
-odom_pub = rospy.Publisher("/camera_odom", Odometry, queue_size=2)
+rospy.Subscriber("/t265/odom/sample", Odometry, odom_callback, queue_size=1)
+pose_pub = rospy.Publisher("/camera_pose", PoseStamped, queue_size=1)
+odom_pub = rospy.Publisher("/camera_odom", Odometry, queue_size=1)
 rate = rospy.Rate(20) 
 tfBuffer = Buffer()
 tflistener = TransformListener(tfBuffer)

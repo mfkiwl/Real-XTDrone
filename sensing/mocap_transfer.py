@@ -12,8 +12,8 @@ def mocap_callback(data):
     local_pose= data
        
 rospy.init_node(vehicle_type+"_"+vehicle_id+'_mocap_transfer')
-rospy.Subscriber("/vrpn_client_node/quad0176/pose", PoseStamped, mocap_callback)
-position_pub = rospy.Publisher(vehicle_type+"_"+vehicle_id+"/mavros/vision_pose/pose", PoseStamped, queue_size=2)
+rospy.Subscriber("/vrpn_client_node/quad0176/pose", PoseStamped, mocap_callback, queue_size=1)
+position_pub = rospy.Publisher(vehicle_type+"_"+vehicle_id+"/mavros/vision_pose/pose", PoseStamped, queue_size=1)
 rate = rospy.Rate(20) 
 
 while True:
